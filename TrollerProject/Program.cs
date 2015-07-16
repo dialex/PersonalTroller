@@ -20,7 +20,7 @@ namespace Troller
         private const string BEGIN_TAG = "BEGIN";
         private const string END_TAG = "END";
 
-        private static DateTime StartTime;
+        private static DateTime BeginTime;
         private static DateTime EndTime;
         private static TimeSpan Interval;
 
@@ -35,6 +35,8 @@ namespace Troller
             {
                 while (true)
                 {
+                    if (!File.Exists(TasksFileName)) CreateDefaultTasks();
+
                     // ==============================================================================
                     // Performs all trolling tasks, waiting the specified interval between each tasks
                     // ==============================================================================
@@ -49,29 +51,18 @@ namespace Troller
                             else if ((line.Length >= CommentString.Length) && (line.Substring(0, CommentString.Length) == CommentString)) { continue; }
 
                             // Otherwise, execute command
-
                             string[] task = line.Split(SEPARATOR);
                             string action = task[0];
                             string parameter = task[1];
 
                             if (action == INTERVAL_TAG)
                             {
-                                string[] stringInput = parameter.Split(':');
-                                int[] timeInput = { int.Parse(stringInput[0]), int.Parse(stringInput[1]), int.Parse(stringInput[2]) };
-                                Interval = new TimeSpan(timeInput[0], timeInput[1], timeInput[2]);
-                                Thread.Sleep(Interval); // To avoid suspicions, wait an interval before first trolling
+                                SetTime(INTERVAL_TAG, parameter);
+                                Thread.Sleep(Interval); // To avoid suspicions, waits before first trolling
                             }
-                            else if (action == BEGIN_TAG)
+                            else if ((action == BEGIN_TAG) || (action == END_TAG))
                             {
-                                string[] stringInput = parameter.Split(':');
-                                int[] timeInput = { int.Parse(stringInput[0]), int.Parse(stringInput[1]), int.Parse(stringInput[2]) };
-                                StartTime = DateTime.Today.AddHours(timeInput[0]).AddMinutes(timeInput[1]).AddSeconds(timeInput[2]);
-                            }
-                            else if (action == END_TAG)
-                            {
-                                string[] stringInput = parameter.Split(':');
-                                int[] timeInput = { int.Parse(stringInput[0]), int.Parse(stringInput[1]), int.Parse(stringInput[2]) };
-                                EndTime = DateTime.Today.AddHours(timeInput[0]).AddMinutes(timeInput[1]).AddSeconds(timeInput[2]);
+                                SetTime(action, parameter);
                             }
                             else
                             {
@@ -90,7 +81,7 @@ namespace Troller
 
                     if (DateTime.Now > EndTime)
                     {
-                        DateTime wakeupTime = StartTime.AddDays(1);
+                        DateTime wakeupTime = BeginTime.AddDays(1);
                         int sleepTime = Convert.ToInt32((wakeupTime - EndTime).TotalMilliseconds);
                         DebugConsole.WriteLine("Soon...");
                         Thread.Sleep(sleepTime);
@@ -170,7 +161,6 @@ namespace Troller
         /// </summary>
         [DllImport("winmm.dll", EntryPoint = "mciSendString")]
         public static extern int mciSendStringA(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
-
         /// <summary>
         /// Opens the CD/DVD drive (FROM: http://stackoverflow.com/a/3797166/675577).
         /// </summary>
@@ -205,6 +195,61 @@ namespace Troller
                 return true;
             }
             else return false;
+        }
+        
+        #endregion
+
+        #region Aux methods
+
+        /// <summary>
+        /// Creates a file with default trolling tasks.
+        /// </summary>
+        private static void CreateDefaultTasks()
+        {
+            string[] lines = {
+                "BEGIN|09:42:57",
+                "EVERY|00:23:56",
+                "END|17:47:14",
+                "DSK|1",
+                "URL|http://www.sanger.dk/",
+                "URL|http://www.ringingtelephone.com/",
+                "URL|http://cachemonet.com/",
+                "DSK|2",
+                "URL|http://cat-bounce.com/",
+                "URL|http://giantbatfarts.com/",
+                "URL|http://www.ooooiiii.com/",
+                "URL|http://www.iiiiiiii.com/",
+                "DSK|3",
+                "URL|http://iamawesome.com/",
+                "URL|http://www.nelson-haha.com/",
+                "DSK|5",
+                "URL|http://leekspin.com/",
+                "URL|http://baconsizzling.com/",
+                "URL|http://www.muchbetterthanthis.com/",
+                "DSK|7",
+                "URL|http://www.sadtrombone.com/?autoplay=true",
+            };
+            File.WriteAllLines(TasksFileName, lines);
+            DebugConsole.WriteLine("Created Tasks.txt using defaults.");
+        }
+
+        /// <summary>
+        /// Sets Begin, End and Interval times.
+        /// </summary>
+        /// <param name="tag">String specifying if it's a Begin, End or Interval setting.</param>
+        /// <param name="parameter">Time value (format HH:mm:ss).</param>
+        private static void SetTime(string tag, string parameter)
+        {
+            string[] stringInput = parameter.Split(':');
+            int[] timeInput = { int.Parse(stringInput[0]), int.Parse(stringInput[1]), int.Parse(stringInput[2]) };
+            DateTime time = DateTime.Today.AddHours(timeInput[0]).AddMinutes(timeInput[1]).AddSeconds(timeInput[2]);
+
+            switch (tag)
+            {
+                case BEGIN_TAG: BeginTime = time; break;
+                case END_TAG: EndTime = time; break;
+                case INTERVAL_TAG: Interval = time.TimeOfDay; break;
+            }
         }
 
         #endregion
