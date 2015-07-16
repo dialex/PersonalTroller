@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{929B458D-6ED0-418E-956C-72DAEFC338E2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Troller</RootNamespace>
     <AssemblyName>Troller</AssemblyName>
@@ -63,7 +63,7 @@
     <None Include="Resources\ogre.ico" />
     <None Include="Resources\troll.ico" />
     <Content Include="Tasks.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
