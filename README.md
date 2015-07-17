@@ -1,6 +1,6 @@
 # Personal Troller
 
-IMG
+`IMG_GOES_HERE`
 
 This C# code builds an executable that enables you to troll someone by:
 
@@ -54,6 +54,7 @@ URL|http://baconsizzling.com/
 URL|http://leekspin.com/
 DSK|7
 URL|http://www.sadtrombone.com/?autoplay=true
+MSG|I can't wait for tomorrow :)
 ```
 
 ## How it works
@@ -70,4 +71,4 @@ Even if the victim opens the **Task Manager** searching for your process, it app
 
 Personal Troller Copyright (C) 2015 Diogo Nunes This program is licensed under the terms of the MIT License and it comes with ABSOLUTELY NO WARRANTY. For more details check LICENSE.
 
-If you liked this software, consider making a donation :laughing: or contributing with a new trolling feature! :smiling_imp:
+If you liked this software, consider making a donation :angel: or contributing with a new trolling action :smiling_imp:.
