@@ -1,6 +1,6 @@
 # Personal Troller
 
-`IMG_GOES_HERE`
+<img src="https://raw.githubusercontent.com/dialex/PersonalTroller/master/TrollerProject/Resources/ogre.png" width="150">
 
 This C# code builds an executable that enables you to troll someone by:
 
