@@ -27,7 +27,7 @@ Each line is a command. The syntax is `action|parameter`. Don't use spaces, use 
 Trolling actions:
 
 - To show a dialog message, `action` is **`MSG`** and `parameter` the **`message`** to display.
-- To open a new tab, `action` is **`URL`** and `parameter` the **`URL`** to open (include `http://`).
+- To open a new tab, `action` is **`URL`** and `parameter` the **`link`** to open (include `http://`).
 - To open the disk drive, `action` is **`DSK`** and `parameter` the **`number`** of times to close and open the drive.
  
 Example:
@@ -65,7 +65,7 @@ The Troller reads the time configurations and keeps running between the `BEGIN` 
 
 Even if the victim opens the **Task Manager** searching for your process, it appears listed as **Host Process For Driver Compatibility**. He/she will never guess that's a trolling process.
 
-:green_heart: The Troller is *environmentally friendly*, suspeding while idle and hibernating to the next day, keeping resources consumption to a minimum.
+:green_heart: The Troller is *environmentally friendly*, suspeding while idle and hibernating to the next day, keeping resource consumption to a minimum.
 
 ## New features & License
 
