@@ -16,7 +16,7 @@ This C# code builds an executable that enables you to troll someone by:
 
 The executable searches for a `Tasks.txt` file containing the trolling actions to perform. If it doesn't exists, the executable will create one with default actions. Make sure you hide these files in a well hidden folder.
 
-## How to configure the trolling tasks
+## How to configure Troller's tasks
 
 Each line is a command. The syntax is `action|parameter`. Don't use spaces, use the `|` separator.
 
