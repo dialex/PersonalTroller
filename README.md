@@ -26,9 +26,9 @@ Each line is a command. The syntax is `action|parameter`. Don't use spaces, use 
 
 Trolling actions:
 
-- To show a dialog message, `action` is **`MSG`** and `parameter` the **`message`** to display.
+- To show a dialog message, `action` is **`MESSAGE`** and `parameter` the **`message`** to display.
 - To open a new tab, `action` is **`URL`** and `parameter` the **`link`** to open (include `http://`).
-- To open the disk drive, `action` is **`DSK`** and `parameter` the **`number`** of times to close and open the drive.
+- To open the disk drive, `action` is **`DISKDRV`** and `parameter` the **`number`** of times to close and open the drive.
  
 Example:
 
@@ -37,24 +37,24 @@ BEGIN|09:42:57
 EVERY|00:19:23
 END|17:47:14
 
-URL|http://www.sanger.dk/
-URL|http://www.ringingtelephone.com/
-URL|http://cachemonet.com/
-DSK|1
-URL|http://cat-bounce.com/
-URL|http://giantbatfarts.com/
-URL|http://www.ooooiiii.com/
-URL|http://www.iiiiiiii.com/
-DSK|3
-URL|http://iamawesome.com/
-URL|http://www.nelson-haha.com/
-DSK|5
-URL|http://www.muchbetterthanthis.com/
-URL|http://baconsizzling.com/
-URL|http://leekspin.com/
-DSK|7
-URL|http://www.sadtrombone.com/?autoplay=true
-MSG|I can't wait for tomorrow :)
+OPENURL|http://www.sanger.dk/
+OPENURL|http://www.ringingtelephone.com/
+OPENURL|http://cachemonet.com/
+DISKDRV|1
+OPENURL|http://cat-bounce.com/
+OPENURL|http://giantbatfarts.com/
+OPENURL|http://www.ooooiiii.com/
+OPENURL|http://www.iiiiiiii.com/
+DISKDRV|3
+OPENURL|http://iamawesome.com/
+OPENURL|http://www.nelson-haha.com/
+DISKDRV|5
+OPENURL|http://www.muchbetterthanthis.com/
+OPENURL|http://baconsizzling.com/
+OPENURL|http://leekspin.com/
+DISKDRV|7
+OPENURL|http://www.sadtrombone.com/?autoplay=true
+MESSAGE|I can't wait for tomorrow :)
 ```
 
 ## How it works

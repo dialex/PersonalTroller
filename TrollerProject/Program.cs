@@ -126,7 +126,7 @@ namespace Troller
         }
 
         #region Trolling actions
-        
+
         /// <summary>
         /// Shows a dialog message. Keep in mind that showing a message will let the victim know the name of your exe.
         /// </summary>
@@ -149,7 +149,7 @@ namespace Troller
         private static bool OpenLinkOnBrowser(string url)
         {
             DebugConsole.WriteLine("Opening tab.");
-            
+
             try
             {
                 Process.Start(url);
@@ -279,24 +279,24 @@ namespace Troller
                 "BEGIN|09:42:57",
                 "EVERY|00:23:56",
                 "END|17:47:14",
-                "DSK|1",
-                "URL|http://www.sanger.dk/",
-                "URL|http://www.ringingtelephone.com/",
-                "URL|http://cachemonet.com/",
-                "DSK|2",
-                "URL|http://cat-bounce.com/",
-                "URL|http://giantbatfarts.com/",
-                "URL|http://www.ooooiiii.com/",
-                "URL|http://www.iiiiiiii.com/",
-                "DSK|3",
-                "URL|http://iamawesome.com/",
-                "URL|http://www.nelson-haha.com/",
-                "DSK|5",
-                "URL|http://leekspin.com/",
-                "URL|http://baconsizzling.com/",
-                "URL|http://www.muchbetterthanthis.com/",
-                "DSK|7",
-                "URL|http://www.sadtrombone.com/?autoplay=true",
+                "DISKDRV|1",
+                "OPENURL|http://www.sanger.dk/",
+                "OPENURL|http://www.ringingtelephone.com/",
+                "OPENURL|http://cachemonet.com/",
+                "DISKDRV|2",
+                "OPENURL|http://cat-bounce.com/",
+                "OPENURL|http://giantbatfarts.com/",
+                "OPENURL|http://www.ooooiiii.com/",
+                "OPENURL|http://www.iiiiiiii.com/",
+                "DISKDRV|3",
+                "OPENURL|http://iamawesome.com/",
+                "OPENURL|http://www.nelson-haha.com/",
+                "DISKDRV|5",
+                "OPENURL|http://leekspin.com/",
+                "OPENURL|http://baconsizzling.com/",
+                "OPENURL|http://www.muchbetterthanthis.com/",
+                "DISKDRV|7",
+                "OPENURL|http://www.sadtrombone.com/?autoplay=true",
             };
             File.WriteAllLines(TasksFileName, lines);
             DebugConsole.WriteLine("Created Tasks.txt using defaults.");
@@ -364,7 +364,7 @@ namespace Troller
             const uint LR_LOADFROMFILE = 0x00000010;
             IntPtr ipImage = LoadImage(IntPtr.Zero, filename, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
             return new Cursor(ipImage);
-        }       
+        }
     }
 
     /// <summary>
