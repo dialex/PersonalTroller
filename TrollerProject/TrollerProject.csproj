@@ -60,6 +60,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Cursors\banana-fuckyou.ani" />
+    <None Include="Resources\Cursors\dog.ani" />
+    <None Include="Resources\Cursors\gangnam.ani" />
+    <None Include="Resources\Cursors\hand.ani" />
+    <None Include="Resources\Cursors\nyan.ani" />
+    <None Include="Resources\Cursors\sonic.ani" />
     <None Include="Resources\ogre.ico" />
     <None Include="Resources\troll.ico" />
     <Content Include="Tasks.txt">

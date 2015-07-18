@@ -61,12 +61,72 @@ namespace Troller.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] banana_fuckyou {
+            get {
+                object obj = ResourceManager.GetObject("banana_fuckyou", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] dog {
+            get {
+                object obj = ResourceManager.GetObject("dog", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] gangnam {
+            get {
+                object obj = ResourceManager.GetObject("gangnam", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] hand {
+            get {
+                object obj = ResourceManager.GetObject("hand", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] nyan {
+            get {
+                object obj = ResourceManager.GetObject("nyan", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         internal static System.Drawing.Icon ogre {
             get {
                 object obj = ResourceManager.GetObject("ogre", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] sonic {
+            get {
+                object obj = ResourceManager.GetObject("sonic", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         
