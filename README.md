@@ -69,6 +69,7 @@ Even if the victim opens the **Task Manager** searching for your process, it app
 
 ## New features & License
 
-Personal Troller Copyright (C) 2015 Diogo Nunes This program is licensed under the terms of the MIT License and it comes with ABSOLUTELY NO WARRANTY. For more details check LICENSE.
+Personal Troller Copyright (C) 2015 [Diogo Nunes](http://www.diogonunes.com/)
+This program is licensed under the terms of the MIT License and it comes with ABSOLUTELY NO WARRANTY. For more details check LICENSE.
 
 If you liked this software, consider making a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DGR2KAV5RLGBW) :angel: or contributing with a [new trolling action](https://github.com/dialex/PersonalTroller/pulls) :smiling_imp:.
