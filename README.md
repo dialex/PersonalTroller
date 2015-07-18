@@ -31,11 +31,11 @@ Each line is a command. The syntax is `action|parameter`. Don't surround the `|`
 
 Trolling actions:
 
-- To show a dialog message, `action` is **`MESSAGE`** and `parameter` the **`message`** to display.
-- To open a new tab, `action` is **`OPENURL`** and `parameter` the **`link`** to open (include `http://`).
-- To open the disk drive, `action` is **`DISKDRV`** and `parameter` the **`number`** of times to close and open the drive.
-- To shutdown the computer, `action` is **`SHUTDWN`** and `parameter` the **`message`** to display 15min before doing it.
-- To logoff the user, `action` is **`LOGUOFF`** and `parameter` the **`message`** to display 15min before doing it.
+- **`MESSAGE`** shows a dialog message, `parameter` is the message.
+- **`OPENURL`** opens a new tab, `parameter` is the link to open.
+- **`DISKDRV`** opens the disk drive, `parameter` is the number of times.
+- **`SHUTDWN`** shutsdown the computer, `parameter` is the message to display 15min before.
+- **`LOGUOFF`** logs off the user, `parameter` is the message to display 15min before.
  
 Example:
 
