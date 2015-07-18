@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -17,10 +15,10 @@ namespace Troller
         private const string TasksFileName = "Tasks.txt";
         private const string CommentString = "//";
 
-        private const char SEPARATOR = '|';
         private const string INTERVAL_TAG = "EVERY";
         private const string BEGIN_TAG = "BEGIN";
         private const string END_TAG = "END";
+        private const char SEPARATOR = '|';
 
         private static DateTime BeginTime;
         private static DateTime EndTime;
@@ -113,180 +111,22 @@ namespace Troller
         /// <returns>True on success, False otherwise.</returns>
         private static bool DoTrolling(string actionCode, string parameter)
         {
-            // Use action codes with 7 characters
+            OpenUrlOnBrowser asdf = new OpenUrlOnBrowser();
+            
             switch (actionCode)
             {
-                case "DISKDRV": return OpenDisksDrive(parameter);
-                case "MESSAGE": return ShowMessage(parameter);
-                case "OPENURL": return OpenLinkOnBrowser(parameter);
-                case "WAITCUR": return ChangeCursorToWait(parameter);
-                case "CUSTCUR": return ChangeCursorToAnimation(parameter);
-                case "SHUTDWN": return ScheduleShutdown(parameter);
-                case "LOGUOFF": return ScheduleLogOff(parameter);
+                case ShowMessage.ActionCode:                return ShowMessage.DoAction(parameter);
+                case OpenDisksDrive.ActionCode:             return OpenDisksDrive.DoAction(parameter);
+                case OpenUrlOnBrowser.ActionCode:           return OpenUrlOnBrowser.DoAction(parameter);
+                case ChangeCursorToWait.ActionCode:         return ChangeCursorToWait.DoAction(parameter);
+                case ChangeCursorToAnimation.ActionCode:    return ChangeCursorToAnimation.DoAction(parameter);
+                case ScheduleShutdown.ActionCode:           return ScheduleShutdown.DoAction(parameter);
+                case ScheduleLogoff.ActionCode:             return ScheduleLogoff.DoAction(parameter);
                 default: return true;
             }
         }
 
-        #region Trolling actions
-        
-        /// <summary>
-        /// Shows a dialog message. Keep in mind that showing a message will let the victim know the name of your exe.
-        /// </summary>
-        /// <param name="text">Text do display.</param>
-        /// <returns>True on success.</returns>
-        private static bool ShowMessage(string text)
-        {
-            DebugConsole.WriteLine("Showing message.");
-
-            string title = "Personal Troller";
-            MessageBox.Show(text, title);
-            return true;
-        }
-
-        /// <summary>
-        /// Opens a URL on a browser.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns>True on success. False otherwise.</returns>
-        private static bool OpenLinkOnBrowser(string url)
-        {
-            DebugConsole.WriteLine("Opening tab.");
-            
-            try
-            {
-                Process.Start(url);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Required by OpenDisksDrive.
-        /// </summary>
-        [DllImport("winmm.dll", EntryPoint = "mciSendString")]
-        public static extern int mciSendStringA(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
-        /// <summary>
-        /// Opens the CD/DVD drive (FROM: http://stackoverflow.com/a/3797166/675577).
-        /// </summary>
-        /// <param name="numTimes">Number of times to open and close.</param>
-        /// <returns>True on success. False otherwise.</returns>
-        private static bool OpenDisksDrive(string numTimes)
-        {
-            DebugConsole.WriteLine("Opening cd/dvd drive.");
-            int times = Convert.ToInt32(numTimes);
-
-            string returnString, driveLetter;
-            returnString = driveLetter = "";
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
-            {
-                if (drive.DriveType == DriveType.CDRom)
-                    driveLetter = drive.Name;
-            }
-
-            if (driveLetter != "")
-            {
-                for (int i = 0; i < times; i++)
-                {
-                    // Open drive
-                    mciSendStringA("open " + driveLetter + ": type CDaudio alias drive" + driveLetter, returnString, 0, 0);
-                    mciSendStringA("set drive" + driveLetter + " door open", returnString, 0, 0);
-                    // Wait for it to open
-                    Thread.Sleep(1000 * 1);
-                    // Close it
-                    mciSendStringA("open " + driveLetter + ": type CDaudio alias drive" + driveLetter, returnString, 0, 0);
-                    mciSendStringA("set drive" + driveLetter + " door closed", returnString, 0, 0);
-                }
-                return true;
-            }
-            else return false;
-        }
-
-        /// <summary>
-        /// Change mouse cursor to wait state.
-        /// </summary>
-        /// <param name="numSeconds">Number of seconds to display the wait cursor.</param>
-        /// <returns>True on success. False otherwise.</returns>
-        private static bool ChangeCursorToWait(string numSeconds)
-        {
-            DebugConsole.WriteLine("Change cursor to wait state.");
-            int totalSeconds = int.Parse(numSeconds);
-
-            for (int currentSec = 0; currentSec < totalSeconds; currentSec++)
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                Application.UseWaitCursor = true;
-                Thread.Sleep(1000 * 1);
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Change mouse cursor to custom animated gif (FROM: http://stackoverflow.com/a/2902336/675577).
-        /// </summary>
-        /// <param name="numSeconds">Number of seconds to display the custom animation.</param>
-        /// <returns>True on success. False otherwise.</returns>
-        private static bool ChangeCursorToAnimation(string numSeconds)
-        {
-            DebugConsole.WriteLine("Change cursor to custom animation.");
-            int totalSeconds = int.Parse(numSeconds);
-
-            try
-            {
-                // Choose custom cursor
-                byte[] cursorResource = Properties.Resources.dog;   // TODO: use random to choose from available resources
-
-                // From Resource to temp file
-                string tempFileName = "temp_cursor.ani";
-                if (File.Exists(tempFileName)) File.Delete(tempFileName);
-                File.WriteAllBytes(tempFileName, cursorResource);
-
-                // Create cursor
-                tempFileName = Path.Combine(Application.StartupPath, tempFileName);
-                Cursor customCursor = AdvancedCursor.Create(tempFileName);
-
-                // Force the cursor during totalSeconds
-                for (int currentSec = 0; currentSec < totalSeconds; currentSec += 5)
-                {
-                    Cursor.Current = customCursor;
-                }
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        private static bool ScheduleShutdown(string shutdownMessage)
-        {
-            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
-
-            int secondsToShutdown = 60 * 15;
-            if (shutdownMessage.Length > MAX_CHARS)
-                shutdownMessage = shutdownMessage.Substring(0, MAX_CHARS - 1);
-
-            Process.Start("shutdown", string.Format("/s /t {0} /d p:0:0 /c \"{1}\"", secondsToShutdown, shutdownMessage));
-            return true;
-        }
-
-        private static bool ScheduleLogOff(string shutdownMessage)
-        {
-            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
-            
-            int secondsToShutdown = 60 * 15;
-            if (shutdownMessage.Length > MAX_CHARS)
-                shutdownMessage = shutdownMessage.Substring(0, MAX_CHARS-1);
-
-            Process.Start("shutdown", string.Format("/l /t {0} /c \"{1}\"", secondsToShutdown, shutdownMessage));
-            return true;
-        }
-
-        #endregion
-
-        #region Aux methods
+        #region Auxiliary methods
 
         /// <summary>
         /// Creates a file with default trolling tasks.
@@ -342,22 +182,279 @@ namespace Troller
         #endregion
     }
 
-    #region Auxiliary classes
+    #region Trolling actions (template)
 
     /// <summary>
-    /// Class that reads resources files and creates Cursors.
+    /// All trolling actions must implement this interface. Use it as a template.
     /// </summary>
-    internal static class AdvancedCursor
+    internal class TrollingAction
     {
+        /// <summary>
+        /// Code made of 7 chars that will be used on Tasks.txt.
+        /// </summary>
+        public const string ActionCode = "XXXXXXX";
+
+        /// <summary>
+        /// Method that executes the trolling action.
+        /// </summary>
+        /// <param name="parameter">Your method may receive one input.</param>
+        /// <returns>True if action was executed with success; False otherwise.</returns>
+        public static bool DoAction(string parameter) { return true; }
+    }
+
+    #endregion
+    #region Trolling actions (implementations)
+
+    /// <summary>
+    /// Shows a dialog message.
+    /// </summary>
+    internal class ShowMessage
+    {
+        public const string ActionCode  = "MESSAGE";
+
+        /// <summary>
+        /// Shows a dialog message. Keep in mind that showing a message will let the victim know the name of your exe.
+        /// </summary>
+        /// <param name="text">Text do display.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string text)
+        {
+            DebugConsole.WriteLine("Showing message.");
+
+            string title = "Personal Troller";
+            MessageBox.Show(text, title);
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Opens a URL on a browser.
+    /// </summary>
+    internal class OpenUrlOnBrowser
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "OPENURL";
+
+        /// <summary>
+        /// Opens a URL on a browser.
+        /// </summary>
+        /// <param name="url">Url (including http://) to open on a new tab.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string url)
+        {
+            DebugConsole.WriteLine("Opening tab.");
+
+            try
+            {
+                Process.Start(url);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Opens the CD/DVD drive.
+    /// </summary>
+    internal class OpenDisksDrive
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "DISKDRV";
+
+        [DllImport("winmm.dll", EntryPoint = "mciSendString")]
+        public static extern int mciSendStringA(string lpstrCommand, string lpstrReturnString, int uReturnLength, int hwndCallback);
+
+        /// <summary>
+        /// Opens the CD/DVD drive.
+        /// </summary>
+        /// <param name="numTimes">Number of times to open and close.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string numTimes)
+        {
+            DebugConsole.WriteLine("Opening cd/dvd drive.");
+            int times = Convert.ToInt32(numTimes);
+
+            string returnString, driveLetter;
+            returnString = driveLetter = "";
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (drive.DriveType == DriveType.CDRom)
+                    driveLetter = drive.Name;
+            }
+
+            if (driveLetter != "")
+            {
+                for (int i = 0; i < times; i++)
+                {
+                    // Open drive
+                    mciSendStringA("open " + driveLetter + ": type CDaudio alias drive" + driveLetter, returnString, 0, 0);
+                    mciSendStringA("set drive" + driveLetter + " door open", returnString, 0, 0);
+                    // Wait for it to open
+                    Thread.Sleep(1000 * 1);
+                    // Close it
+                    mciSendStringA("open " + driveLetter + ": type CDaudio alias drive" + driveLetter, returnString, 0, 0);
+                    mciSendStringA("set drive" + driveLetter + " door closed", returnString, 0, 0);
+                }
+                return true;
+            }
+            else return false;
+        }
+    }
+
+    /// <summary>
+    /// Schedules the computer shutdown.
+    /// </summary>
+    internal class ScheduleShutdown
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "SHUTDWN";
+
+        /// <summary>
+        /// Schedules the computer shutdown.
+        /// </summary>
+        /// <param name="shutdownMessage">Notification message after scheduling.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string shutdownMessage)
+        {
+            DebugConsole.WriteLine("Scheduling computer shutdown.");
+            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
+
+            int secondsToShutdown = 60 * 15;
+            if (shutdownMessage.Length > MAX_CHARS)
+                shutdownMessage = shutdownMessage.Substring(0, MAX_CHARS - 1);
+
+            Process.Start("shutdown", string.Format("/s /t {0} /d p:0:0 /c \"{1}\"", secondsToShutdown, shutdownMessage));
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Schedules the computer shutdown.
+    /// </summary>
+    internal class ScheduleLogoff
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "LOGUOFF";
+
+        /// <summary>
+        /// Schedules the computer shutdown.
+        /// </summary>
+        /// <param name="logoffMessage">Notification message after scheduling.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string logoffMessage)
+        {
+            DebugConsole.WriteLine("Scheduling user logoff.");
+            int MAX_CHARS = 127;    //FROM: http://ss64.com/nt/shutdown.html
+
+            int secondsToLogoff = 60 * 15;
+            if (logoffMessage.Length > MAX_CHARS)
+                logoffMessage = logoffMessage.Substring(0, MAX_CHARS - 1);
+
+            Process.Start("shutdown", string.Format("/l /t {0} /c \"{1}\"", secondsToLogoff, logoffMessage));
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Change mouse cursor to wait state.
+    /// </summary>
+    internal class ChangeCursorToWait
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "WAITCUR";
+
+        /// <summary>
+        /// Change mouse cursor to wait state.
+        /// </summary>
+        /// <param name="numSeconds">Number of seconds to display the wait cursor.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string numSeconds)
+        {
+            DebugConsole.WriteLine("Change cursor to wait state.");
+            int totalSeconds = int.Parse(numSeconds);
+
+            //TODO: This doesn't change the cursor, I don't know why, I tried everything!
+            for (int currentSec = 0; currentSec < totalSeconds; currentSec++)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                Application.UseWaitCursor = true;
+                Thread.Sleep(1000 * 1);
+            }
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// Change mouse cursor to custom animated gif.
+    /// </summary>
+    internal class ChangeCursorToAnimation
+    {
+        /// <summary>
+        /// Code that will be used on Tasks.txt to trigger the action.
+        /// </summary>
+        public const string ActionCode = "CUSTCUR";
+
         [DllImport("User32.dll")]
         private static extern IntPtr LoadCursorFromFile(String str);
         [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        internal static extern IntPtr LoadImage(IntPtr hinst, string lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
+        private static extern IntPtr LoadImage(IntPtr hinst, string lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
+
+        /// <summary>
+        /// Change mouse cursor to custom animated gif.
+        /// </summary>
+        /// <param name="numSeconds">Number of seconds to display the custom animation.</param>
+        /// <returns>True on success.</returns>
+        public static bool DoAction(string numSeconds)
+        {
+            DebugConsole.WriteLine("Change cursor to custom animation.");
+            int totalSeconds = int.Parse(numSeconds);
+
+            try
+            {
+                // Choose custom cursor
+                // TODO: choose randomly from available resources
+                byte[] cursorResource = Properties.Resources.dog;
+
+                // From Resource to temp file
+                string tempFileName = "temp_cursor.ani";
+                if (File.Exists(tempFileName)) File.Delete(tempFileName);
+                File.WriteAllBytes(tempFileName, cursorResource);
+
+                // Create cursor
+                tempFileName = Path.Combine(Application.StartupPath, tempFileName);
+                Cursor customCursor = CreateCursor(tempFileName);
+
+                // Force the cursor during totalSeconds
+                //TODO: This doesn't change the cursor, I don't know why, I tried everything! (http://stackoverflow.com/a/2902336/675577)
+                for (int currentSec = 0; currentSec < totalSeconds; currentSec += 5)
+                {
+                    Cursor.Current = customCursor;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Creates a cursor from a file.
         /// </summary>
-        public static Cursor Create(string filename)
+        private static Cursor CreateCursor(string filename)
         {
             return CreateUsingLoadCursor(filename);
         }
@@ -382,8 +479,12 @@ namespace Troller
             const uint LR_LOADFROMFILE = 0x00000010;
             IntPtr ipImage = LoadImage(IntPtr.Zero, filename, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
             return new Cursor(ipImage);
-        }       
+        }
     }
+
+    #endregion
+
+    #region Auxiliary classes
 
     /// <summary>
     /// Class that writes debug messages into a Console.
