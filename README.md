@@ -2,11 +2,12 @@
 
 <img src="https://raw.githubusercontent.com/dialex/PersonalTroller/master/TrollerProject/Resources/ogre.png" width="150">
 
-This C# code builds an executable that enables you to troll someone by:
+This code builds an executable that enables you to troll someone by:
 
 - Showing a dialog message
 - Opening a new tab on for a specific URL
 - Opening and closing the CD/DVD drive several times
+- Shutting down or logging off displaying a message
 
 ## How to use
 
@@ -14,11 +15,15 @@ This C# code builds an executable that enables you to troll someone by:
 2. Open the executable.
 3. Enjoy.
 
-The executable searches for a `Tasks.txt` file containing the trolling actions to perform. If it doesn't exists, the executable will create one with default actions. Make sure you hide these files in a well hidden folder.
+The executable searches for a `Tasks.txt` file containing the trolling actions to perform. If it doesn't exists, the executable will create one with default actions.
+
+## Download
+
+You can build the source files to get the latest `Troller.exe` or download this [one ready to use](http://www.diogonunes.com/assets/downloadmanager/click.php?id=11).
 
 ## How to configure Troller's tasks
 
-Each line is a command. The syntax is `action|parameter`. Don't use spaces, use the `|` separator.
+Each line is a command. The syntax is `action|parameter`. Don't surround the `|` separator with spaces.
 
 - Start by specifying the time to start (`BEGIN` action) and suspend (`END` action) the troller.
 - Then specify the time interval between trolling actions (`EVERY` action).
@@ -27,8 +32,10 @@ Each line is a command. The syntax is `action|parameter`. Don't use spaces, use 
 Trolling actions:
 
 - To show a dialog message, `action` is **`MESSAGE`** and `parameter` the **`message`** to display.
-- To open a new tab, `action` is **`URL`** and `parameter` the **`link`** to open (include `http://`).
+- To open a new tab, `action` is **`OPENURL`** and `parameter` the **`link`** to open (include `http://`).
 - To open the disk drive, `action` is **`DISKDRV`** and `parameter` the **`number`** of times to close and open the drive.
+- To shutdown the computer, `action` is **`SHUTDWN`** and `parameter` the **`message`** to display 15min before doing it.
+- To logoff the user, `action` is **`LOGUOFF`** and `parameter` the **`message`** to display 15min before doing it.
  
 Example:
 
@@ -41,17 +48,17 @@ OPENURL|http://www.sanger.dk/
 OPENURL|http://www.ringingtelephone.com/
 OPENURL|http://cachemonet.com/
 DISKDRV|1
-OPENURL|http://cat-bounce.com/
 OPENURL|http://giantbatfarts.com/
 OPENURL|http://www.ooooiiii.com/
+OPENURL|http://cat-bounce.com/
 OPENURL|http://www.iiiiiiii.com/
 DISKDRV|3
+OPENURL|http://leekspin.com/
 OPENURL|http://iamawesome.com/
 OPENURL|http://www.nelson-haha.com/
 DISKDRV|5
 OPENURL|http://www.muchbetterthanthis.com/
 OPENURL|http://baconsizzling.com/
-OPENURL|http://leekspin.com/
 DISKDRV|7
 OPENURL|http://www.sadtrombone.com/?autoplay=true
 MESSAGE|I can't wait for tomorrow :)
@@ -65,11 +72,13 @@ The Troller reads the time configurations and keeps running between the `BEGIN` 
 
 Even if the victim opens the **Task Manager** searching for your process, it appears listed as **Host Process For Driver Compatibility**. He/she will never guess that's a trolling process.
 
-:green_heart: The Troller is *environmentally friendly*, suspeding while idle and hibernating to the next day, keeping resource consumption to a minimum.
+:green_heart: The Troller is *environmentally friendly*, suspending while idle and hibernating to the next day, keeping resource consumption to a minimum.
 
 ## New features & License
 
 Personal Troller Copyright (C) 2015 [Diogo Nunes](http://www.diogonunes.com/)
 This program is licensed under the terms of the MIT License and it comes with ABSOLUTELY NO WARRANTY. For more details check LICENSE.
+
+**Be responsible - this program is for fun, not for harm.** Both creator and contributors of this program cannot be held responsible for the consequences of how others use it.
 
 If you liked this software, consider making a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DGR2KAV5RLGBW) :angel: or contributing with a [new trolling action](https://github.com/dialex/PersonalTroller/pulls) :smiling_imp:.
