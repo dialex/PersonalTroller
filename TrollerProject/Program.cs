@@ -112,7 +112,7 @@ namespace Troller
         private static bool DoTrolling(string actionCode, string parameter)
         {
             OpenUrlOnBrowser asdf = new OpenUrlOnBrowser();
-            
+
             switch (actionCode)
             {
                 case ShowMessage.ActionCode:                return ShowMessage.DoAction(parameter);
@@ -141,20 +141,21 @@ namespace Troller
                 "OPENURL|http://www.sanger.dk/",
                 "OPENURL|http://www.ringingtelephone.com/",
                 "OPENURL|http://cachemonet.com/",
-                "DISKDRV|2",
-                "OPENURL|http://cat-bounce.com/",
+                "DISKDRV|1",
                 "OPENURL|http://giantbatfarts.com/",
                 "OPENURL|http://www.ooooiiii.com/",
+                "OPENURL|http://cat-bounce.com/",
                 "OPENURL|http://www.iiiiiiii.com/",
                 "DISKDRV|3",
+                "OPENURL|http://leekspin.com/",
                 "OPENURL|http://iamawesome.com/",
                 "OPENURL|http://www.nelson-haha.com/",
                 "DISKDRV|5",
-                "OPENURL|http://leekspin.com/",
-                "OPENURL|http://baconsizzling.com/",
                 "OPENURL|http://www.muchbetterthanthis.com/",
+                "OPENURL|http://baconsizzling.com/",
                 "DISKDRV|7",
                 "OPENURL|http://www.sadtrombone.com/?autoplay=true",
+                "LOGUOFF|Windows detected porn on your computer."
             };
             File.WriteAllLines(TasksFileName, lines);
             DebugConsole.WriteLine("Created Tasks.txt using defaults.");
