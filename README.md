@@ -1,6 +1,6 @@
 # Personal Troller
 
-<img src="https://raw.githubusercontent.com/dialex/PersonalTroller/master/TrollerProject/Resources/ogre.png" width="150">
+<img src="https://raw.githubusercontent.com/dialex/PersonalTroller/master/TrollerProject/Resources/troll.png" width="170">
 
 This code builds an executable that enables you to troll someone by:
 
