@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Host Process For Driver Compatibility")] // They'll never suspect this name :P
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Diogo Nunes")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Host Process For Driver Compatibility")] // They'll never suspect this name :P
-[assembly: AssemblyCopyright("Diogo Nunes ©  2015")]
+[assembly: AssemblyCopyright("MIT LICENSE  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
