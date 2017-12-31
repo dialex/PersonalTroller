@@ -81,4 +81,4 @@ This program is licensed under the terms of the MIT License and it comes with AB
 
 **Be responsible - this program is for fun, not for harm.** Both creator and contributors of this program cannot be held responsible for the consequences of how others use it.
 
-If you liked this software, consider making a [donation](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DGR2KAV5RLGBW) :angel: or contributing with a [new trolling action](https://github.com/dialex/PersonalTroller/pulls) :smiling_imp:.
+If you liked this software, consider making a [donation](https://www.paypal.me/dialexnunes) :angel: or contributing with a [new trolling action](https://github.com/dialex/PersonalTroller/pulls) :smiling_imp:.
